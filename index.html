@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantry &amp; Plan — Weekly Meal Planner</title>
+  <meta name="description" content="Plan your week, scale recipes, and turn your meal plan into a grouped shopping list. All saved in your browser.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23b4552f'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle'%3E%F0%9F%8D%B3%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#planner" aria-label="Pantry and Plan home">
+        <span class="brand-mark" aria-hidden="true">🍳</span>
+        <span class="brand-text">
+          <strong>Pantry &amp; Plan</strong>
+          <small>Weekly meals, sorted</small>
+        </span>
+      </a>
+
+      <nav class="tabs" aria-label="Sections">
+        <button class="tab is-active" type="button" data-view="planner">Planner</button>
+        <button class="tab" type="button" data-view="recipes">Recipes</button>
+        <button class="tab" type="button" data-view="shopping">Shopping</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <button class="icon-btn" type="button" id="themeToggle" aria-label="Switch to dark theme" title="Switch theme">
+          <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+        </button>
+        <button class="btn btn-dark" type="button" id="newRecipeBtn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span>New recipe</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app">
+    <!-- PLANNER -->
+    <section class="view" id="view-planner">
+      <div class="view-head">
+        <div class="view-title">
+          <p class="eyebrow" id="weekEyebrow">This week</p>
+          <h1 id="weekTitle">Your week</h1>
+          <p class="sub" id="weekSub">Loading your plan…</p>
+        </div>
+        <div class="head-actions">
+          <div class="weeknav" role="group" aria-label="Change week">
+            <button class="icon-btn plain" type="button" id="prevWeek" aria-label="Previous week">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="weeknav-today" type="button" id="todayBtn">Today</button>
+            <button class="icon-btn plain" type="button" id="nextWeek" aria-label="Next week">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+          <button class="btn btn-outline" type="button" id="autoFillBtn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M3 12h3M18 12h3M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
+            Auto-fill
+          </button>
+          <button class="btn btn-ghost" type="button" id="clearWeekBtn">Clear week</button>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="board-wrap">
+        <div class="board" id="board" aria-label="Weekly meal plan"></div>
+      </div>
+
+      <p class="hint">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+        Click a slot to add a meal, or drag a filled card onto another slot to move it. Everything saves automatically.
+      </p>
+    </section>
+
+    <!-- RECIPES -->
+    <section class="view" id="view-recipes" hidden>
+      <div class="view-head">
+        <div class="view-title">
+          <p class="eyebrow">Cookbook</p>
+          <h1>Recipes</h1>
+          <p class="sub" id="recipeSub">A little library for a well-fed week.</p>
+        </div>
+        <div class="search">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+          <label class="sr-only" for="recipeSearch">Search recipes</label>
+          <input id="recipeSearch" type="search" placeholder="Search recipes, tags or ingredients" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="filters" id="filters" aria-label="Filter recipes"></div>
+      <div class="recipe-grid" id="recipeGrid"></div>
+    </section>
+
+    <!-- SHOPPING -->
+    <section class="view" id="view-shopping" hidden>
+      <div class="view-head">
+        <div class="view-title">
+          <p class="eyebrow">Groceries</p>
+          <h1>Shopping list</h1>
+          <p class="sub" id="shopSub">Built from this week's plan.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-outline" type="button" data-action="copy-list">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+            Copy list
+          </button>
+          <button class="btn btn-dark" type="button" data-action="print-list">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>
+            Print
+          </button>
+        </div>
+      </div>
+
+      <div class="shopping-layout">
+        <aside class="shop-side">
+          <div class="shop-card" id="shopSummary"></div>
+          <div class="shop-card">
+            <h3 class="mini-title">Add your own</h3>
+            <p class="mini-sub">Extras the recipes won't cover.</p>
+            <form id="extraForm" class="extra-form">
+              <label class="sr-only" for="extraName">Item name</label>
+              <input id="extraName" type="text" placeholder="e.g. birthday candles" maxlength="60" required>
+              <div class="extra-row">
+                <label class="sr-only" for="extraAisle">Aisle</label>
+                <select id="extraAisle"></select>
+                <button class="btn btn-outline" type="submit">Add</button>
+              </div>
+            </form>
+          </div>
+          <div class="shop-tip">
+            <span aria-hidden="true">🧾</span>
+            <p>Quantities scale with every planned meal. Checked items stay checked if you return later.</p>
+          </div>
+        </aside>
+
+        <div class="shop-main">
+          <div class="shop-toolbar">
+            <h2 id="shopListTitle">This week's groceries</h2>
+            <div class="shop-tools">
+              <button class="btn btn-ghost btn-sm" type="button" data-action="reset-checks">Reset checks</button>
+            </div>
+          </div>
+          <div id="shopLists"></div>
+          <p class="shop-footnote">Grouped by supermarket aisle · gathered from the recipes in your plan.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Made for calmer weeks.</span>
+    <span class="footer-dot" aria-hidden="true">·</span>
+    <span>Your plan is saved locally in this browser.</span>
+  </footer>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-backdrop" id="detailModal" hidden>
+    <div class="modal modal-lg" id="detailContent" role="dialog" aria-modal="true" aria-label="Recipe details"></div>
+  </div>
+
+  <!-- PICKER MODAL -->
+  <div class="modal-backdrop" id="pickerModal" hidden>
+    <div class="modal" id="pickerContent" role="dialog" aria-modal="true" aria-label="Add a meal"></div>
+  </div>
+
+  <!-- FORM MODAL -->
+  <div class="modal-backdrop" id="formModal" hidden>
+    <div class="modal modal-lg" id="formContent" role="dialog" aria-modal="true" aria-label="Recipe editor"></div>
+  </div>
+
+  <!-- CONFIRM MODAL -->
+  <div class="modal-backdrop confirm-backdrop" id="confirmModal" hidden>
+    <div class="modal modal-sm" id="confirmContent" role="dialog" aria-modal="true" aria-label="Please confirm"></div>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
